@@ -1,0 +1,48 @@
+
+### crete diary
+POST localhost:8080/create/diary
+Content-Type: application/json
+
+{
+  "date": "2024-08-30",
+  "text": "안녕하세요입니다."
+}
+
+### crete diary - wrong date format
+POST localhost:8080/create/diary
+Content-Type: application/json
+
+{
+  "date": "2024/08/30",
+  "text": "안녕하세요"
+}
+
+### crete diary - too long text
+POST localhost:8080/create/diary
+Content-Type: application/json
+
+{
+  "date": "2024-08-30",
+  "text": "안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, 안녕하세요, "
+}
+
+### get diary
+GET localhost:8080/read/diary?date=2024-06-29
+Accept: application/json
+
+### get diary period
+GET localhost:8080/read/diaries?startDate=2024-06-28&endDate=2024-06-29
+Accept: application/json
+
+### update diary
+PUT localhost:8080/update/diary
+Content-Type: application/json
+
+{
+  "date": "2024-06-28",
+  "text": " 다이어리 수정 "
+}
+
+### delete diary period
+DELETE localhost:8080/delete/diary?date=2024-06-29
+Accept: application/json
