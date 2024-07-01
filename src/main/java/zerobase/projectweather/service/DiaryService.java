@@ -46,7 +46,7 @@ public class DiaryService {
     @Value("${apiKey}")
     private String apiKey;
 
-
+    @Transactional
     public DiaryDto createDiary(String date, String text) {
         logger.info("Create diary");
 
@@ -105,7 +105,7 @@ public class DiaryService {
                 .icon(parseWeather.get("icon").toString())
                 .temperature((Double) parseWeather.get("temp"))
                 .build();
-        dateWeatherRepository.save(dateWeather);
+//        dateWeatherRepository.save(dateWeather);
         return dateWeather;
 
     }
