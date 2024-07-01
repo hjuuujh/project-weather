@@ -206,6 +206,7 @@ public class DiaryService {
                 .weather(diary.getWeather())
                 .text(text)
                 .build();
+
         diaryRepository.save(newDiary);
         return DiaryDto.from(newDiary);
     }

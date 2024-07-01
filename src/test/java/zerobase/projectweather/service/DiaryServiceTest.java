@@ -81,7 +81,7 @@ class DiaryServiceTest {
         verify(diaryRepository, times(1)).save(captor.capture()); // save()를 한번 호출 했는지 확인
         assertEquals("Clouds", captor.getValue().getWeather().getWeather());
         assertEquals("안녕하세요", captor.getValue().getText());
-        assertEquals(LocalDate.now(), diaryDto.getDate());
+        assertEquals("2024-06-30", diaryDto.getDate());
         assertEquals("Clouds", diaryDto.getWeather());
         assertEquals("안녕하세요", diaryDto.getText());
     }
@@ -115,7 +115,7 @@ class DiaryServiceTest {
         verify(diaryRepository, times(1)).save(captor.capture()); // save()를 한번 호출 했는지 확인
         assertEquals("Clear", captor.getValue().getWeather().getWeather());
         assertEquals("안녕하세요", captor.getValue().getText());
-        assertEquals(LocalDate.now(), diaryDto.getDate());
+        assertEquals(LocalDate.parse("2024-06-30"), diaryDto.getDate());
         assertEquals(dateWeather.get(0).getWeather(), diaryDto.getWeather());
         assertEquals("안녕하세요", diaryDto.getText());
     }

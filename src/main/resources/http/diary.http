@@ -40,7 +40,7 @@ Content-Type: application/json
 
 {
   "date": "2024-06-28",
-  "text": " 다이어리 수정 "
+  "text": "다이어리 수정 확인"
 }
 
 ### delete diary period

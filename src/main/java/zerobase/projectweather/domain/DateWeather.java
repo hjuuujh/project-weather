@@ -7,7 +7,6 @@ import javax.persistence.Id;
 import java.time.LocalDate;
 
 @Getter
-@Setter
 @Entity(name = "date_weather")
 @NoArgsConstructor
 @Builder
