@@ -20,6 +20,7 @@ import zerobase.projectweather.type.ErrorCode;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -212,6 +213,9 @@ class DiaryServiceTest {
                         .build()
         );
 
+        given(diaryRepository.existsByDate(any()))
+                .willReturn(true);
+
         given(diaryRepository.findAllByDate(any()))
                 .willReturn(diaryList.stream().filter(diary -> diary.getDate().equals(LocalDate.parse("2024-06-29"))).collect(Collectors.toList()));
 
@@ -253,8 +257,8 @@ class DiaryServiceTest {
     @DisplayName("특정일 일기 가져오기 - 실패 -  일기가 없는 경우")
     void failReadDiary_diaryNotFound() {
         //given
-        given(diaryRepository.findAllByDate(any()))
-                .willReturn(Arrays.asList());
+        given(diaryRepository.existsByDate(any()))
+                .willReturn(false);
 
         //when
         WeatherException exception = assertThrows(WeatherException.class
@@ -434,8 +438,14 @@ class DiaryServiceTest {
                         .build()
         );
 
+        given(diaryRepository.existsByDate(any()))
+                .willReturn(true);
+
+        Diary selectedDiary = diaryList.stream().filter(diary -> diary.getDate().equals(LocalDate.parse("2024-06-28"))).findFirst().get();
+
         given(diaryRepository.getFirstByDate(any()))
-                .willReturn(diaryList.stream().filter(diary -> diary.getDate().equals(LocalDate.parse("2024-06-28"))).findFirst().get());
+                .willReturn(selectedDiary);
+
 
         //when
         DiaryDto newDiary = diaryService.updateDiary("2024-06-28", "업데이트");
@@ -450,13 +460,11 @@ class DiaryServiceTest {
     @DisplayName("일기 수정 - 실패 - 일기가 없는 경우")
     void failUpdateDiary_diaryNotFound() {
         //given
-
-        given(diaryRepository.getFirstByDate(any()))
-                .willReturn(null);
-
+        given(diaryRepository.existsByDate(any()))
+                .willReturn(false);
         //when
         WeatherException exception = assertThrows(WeatherException.class
-                , () -> diaryService.updateDiary("2024-06-28", "업데이트"));
+                , () -> diaryService.updateDiary("2020-06-28", "업데이트"));
 
         //then
         assertEquals(ErrorCode.DIARY_NOT_FOUND, exception.getErrorCode());
@@ -507,8 +515,8 @@ class DiaryServiceTest {
                         .build()
         );
 
-        given(diaryRepository.getFirstByDate(any()))
-                .willReturn(diaryList.stream().filter(diary -> diary.getDate().equals(LocalDate.parse("2024-06-28"))).findFirst().get());
+        given(diaryRepository.existsByDate(any()))
+                .willReturn(true);
 
         //when
         WeatherException exception = assertThrows(WeatherException.class
@@ -541,10 +549,8 @@ class DiaryServiceTest {
     @DisplayName("해당 날짜의 모든 일기 삭제 - 실패 - 해당 날짜에 일기 없는 경우")
     void failDeleteDiary_diaryNotFound() {
         //given
-        given(diaryRepository.findAllByDate(any()))
-                .willReturn(Arrays.asList());
-//        diaryRepository.deleteAllByDate(any());
-
+        given(diaryRepository.existsByDate(any()))
+                .willReturn(false);
         //when
         WeatherException exception = assertThrows(WeatherException.class
                 , () -> diaryService.deleteDiary("2020-06-28"));

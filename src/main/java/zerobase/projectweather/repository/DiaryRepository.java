@@ -18,4 +18,6 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
 
     @Transactional
     void deleteAllByDate(LocalDate date);
+
+    boolean existsByDate(LocalDate date);
 }

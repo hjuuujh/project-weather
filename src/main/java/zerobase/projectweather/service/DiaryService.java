@@ -161,19 +161,20 @@ public class DiaryService {
 
     public List<DiaryDto> getDiariesByDate(String date) {
         checkDateFormat(date);
+        diaryNotExists(date);
 
         List<Diary> diaries = diaryRepository.findAllByDate(LocalDate.parse(date));
 
-        diariesIsNull(diaries);
 
         return diaries.stream().map(DiaryDto::from).collect(Collectors.toList());
     }
 
-    private void diariesIsNull(List<Diary> diaries) {
-        if (diaries.isEmpty()) {
+    private void diaryNotExists(String date) {
+        if(!diaryRepository.existsByDate(LocalDate.parse(date))){
             throw new WeatherException(ErrorCode.DIARY_NOT_FOUND);
         }
     }
+
 
     public List<DiaryDto> getDiariesByDatePeriod(String startDate, String endDate) {
         checkDateFormat(startDate);
@@ -187,18 +188,19 @@ public class DiaryService {
 
         List<Diary> diaries = diaryRepository.findAllByDateBetween(LocalDate.parse(startDate), LocalDate.parse(endDate));
         System.out.println(LocalDate.parse(startDate) + " " + LocalDate.parse(endDate));
-        diariesIsNull(diaries);
+        if (diaries.isEmpty()) {
+            throw new WeatherException(ErrorCode.DIARY_NOT_FOUND);
+        }
         return diaries.stream().map(DiaryDto::from).collect(Collectors.toList());
     }
 
 
     public DiaryDto updateDiary(String date, String text) {
-        Diary diary = diaryRepository.getFirstByDate(LocalDate.parse(date));
-        if (diary == null) {
-            throw new WeatherException(ErrorCode.DIARY_NOT_FOUND);
-        }
-
+        diaryNotExists(date);
         checkTextLength(text);
+
+        Diary diary = diaryRepository.getFirstByDate(LocalDate.parse(date));
+
 
         Diary newDiary = Diary.builder()
                 .id(diary.getId())
@@ -213,7 +215,7 @@ public class DiaryService {
 
     public DiaryDto deleteDiary(String date) {
         checkDateFormat(date);
-        diariesIsNull(diaryRepository.findAllByDate(LocalDate.parse(date)));
+        diaryNotExists(date);
         diaryRepository.deleteAllByDate(LocalDate.parse(date));
         return DiaryDto.fromDelete(Diary.builder().date(LocalDate.parse(date)).build());
     }
